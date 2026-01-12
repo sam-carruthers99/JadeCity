@@ -10,7 +10,7 @@ app.use(cors({
     'http://localhost:3000',
     'https://jadecityrecords.com',
     'https://www.jadecityrecords.com',
-    'https://jadecity-production.up.railway.app'
+    'https://web-production-7e393.up.railway.app'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']

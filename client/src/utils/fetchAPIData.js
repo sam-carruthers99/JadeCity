@@ -5,7 +5,7 @@ const getBaseURL = () => {
 export const fetchAPIData = async (type) => {
   try {
     const baseURL = getBaseURL();
-    const url = `${baseURL}/api/${type}`;
+    const url = `/api/${type}`;
 
     const response = await fetch(url);
 
@@ -22,7 +22,7 @@ export const fetchAPIData = async (type) => {
 export const postAPIData = async (type, body) => {
   try {
     const baseURL = getBaseURL();
-    const url = `${baseURL}/api/${type}`;
+    const url = `/api/${type}`;
 
     const response = await fetch(url, {
       method: 'POST',

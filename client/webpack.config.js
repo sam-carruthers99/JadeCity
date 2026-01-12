@@ -5,10 +5,9 @@ const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-    entry: './client/src/index.jsx', // Entry point of your React app
+    entry: './src/index.jsx', // Entry point of your React app
     output: {
-        path: path.resolve(__dirname, 'client/dist'), // Output directory for the bundle
-        path: path.resolve(__dirname, 'client/dist'), // Output directory for the bundle
+        path: path.resolve(__dirname, 'dist'), // Output directory for the bundle
         filename: 'bundle.js',
         publicPath: '/',
     },
@@ -45,7 +44,7 @@ module.exports = {
     },
     devServer: {
         static: {
-            directory: path.join(__dirname, 'client/dist'), // Serve content from the dist folder
+            directory: path.join(__dirname, 'dist'), // Serve content from the dist folder
         },
         compress: true,
         port: 3000,
@@ -53,7 +52,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './client/Public/index.html', // Point to your HTML template
+            template: './Public/index.html', // Point to your HTML template
             filename: 'index.html',
         }),
         new webpack.DefinePlugin({
@@ -65,7 +64,7 @@ module.exports = {
                 {
                     from: path.resolve(
                         __dirname,
-                        'client/Public/img/FireflyLaser.jpg'
+                        'Public/img/FireflyLaser.jpg'
                     ),
                     to: 'static/images', // Output directory in `dist`
                 },

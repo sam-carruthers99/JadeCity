@@ -1,43 +1,43 @@
+const getBaseURL = () => {
+  return process.env.REACT_APP_API_URL || '';
+};
+
 export const fetchAPIData = async (type) => {
   try {
-      const baseURL = process.env.REACT_APP_API_URL || ''; // Use Amplify's REACT_APP_API_URL in production, fallback to relative path in development
-      const finalURL = `${baseURL}/api/${type}`;
-      // console.log('Fetching from:', finalURL);
-      const response = await fetch(`${baseURL}/api/${type}`);
-      
-      if (!response.ok) {
-          throw new Error(
-              `Error fetching data: ${response.statusText}`
-          );
-      }
+    const baseURL = getBaseURL();
+    const url = `${baseURL}/api/${type}`;
 
-      const data = await response.json();
-      return data;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Error fetching data: ${response.statusText}`);
+    }
+
+    return await response.json();
   } catch (error) {
-      // console.error('Error fetching data:', error);
-      return [];
+    return [];
   }
 };
 
-// New function for POST requests
 export const postAPIData = async (type, body) => {
-    try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/${type}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        });
+  try {
+    const baseURL = getBaseURL();
+    const url = `${baseURL}/api/${type}`;
 
-        if (!response.ok) {
-            throw new Error(`Error posting data: ${response.statusText}`);
-        }
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
 
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        // console.error('Error posting data:', error);
-        return { error: 'Failed to post data' };
+    if (!response.ok) {
+      throw new Error(`Error posting data: ${response.statusText}`);
     }
+
+    return await response.json();
+  } catch (error) {
+    return { error: 'Failed to post data' };
+  }
 };

@@ -1,49 +1,34 @@
-require('dotenv').config()
-const express = require('express')
-const cors = require('cors')
-const path = require('path')
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
 
-const app = express()
-const port = process.env.PORT || 3000
+const app = express();
+const port = process.env.PORT || 3000;
 
-// Enable CORS
-app.use(
-    cors({
-        origin: [
-            'http://localhost:3000',
-            'https://jadecityrecords.com',
-            'https://www.jadecityrecords.com',
-            'https://jadecity-production.up.railway.app',
-        ],
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        allowedHeaders: ['Content-Type', 'Authorization'],
-    })
-)
-// app.get('/', (req, res) => {
-//   res.send('Welcome to the Jade City Records API');
-// });
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://jadecityrecords.com',
+    'https://www.jadecityrecords.com',
+    'https://jadecity-production.up.railway.app'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// Serve API routes
-const emailRoute = require('./routes/email')
-app.use('/api/email', emailRoute)
+app.use(express.json());
 
-const artistsRoutes = require('./routes/artists')
-app.use('/api/artists', artistsRoutes)
+// Health check (important)
+app.get('/', (req, res) => {
+  res.send('Jade City Records API running');
+});
 
-const newsRoutes = require('./routes/news')
-app.use('/api/news', newsRoutes)
+// API routes
+app.use('/api/email', require('./routes/email'));
+app.use('/api/artists', require('./routes/artists'));
+app.use('/api/news', require('./routes/news'));
+app.use('/api/shop', require('./routes/shop'));
 
-const shopRoutes = require('./routes/shop')
-app.use('/api/shop', shopRoutes)
-
-// Serve React app for non-API routes
-app.use(express.static(path.join(__dirname, '../client/dist')))
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'))
-})
-
-// Start Server
 app.listen(port, '0.0.0.0', () => {
-    console.log(`😎 Server is running on http://localhost:${port} 😎`)
-})
+  console.log(`Server listening on port ${port}`);
+});

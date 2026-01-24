@@ -29,6 +29,13 @@ app.use('/api/artists', require('./routes/artists'));
 app.use('/api/news', require('./routes/news'));
 app.use('/api/shop', require('./routes/shop'));
 
+// Serve React app for non-API routes
+app.use(express.static(path.join(__dirname, '../client/dist')))
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'))
+})
+
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server listening on port ${port}`);
 });

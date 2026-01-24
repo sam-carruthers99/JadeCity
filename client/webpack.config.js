@@ -54,6 +54,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './Public/index.html', // Point to your HTML template
             filename: 'index.html',
+            favicon: './Public/img/JC-Logo.svg'
         }),
         new webpack.DefinePlugin({
           'process.env.REACT_APP_API_URL': JSON.stringify(process.env.REACT_APP_API_URL)

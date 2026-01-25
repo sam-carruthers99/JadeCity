@@ -117,3 +117,5 @@ You can listen to the track here: ${linkUpload}`,
     })
   }
 })
+
+module.exports = router;

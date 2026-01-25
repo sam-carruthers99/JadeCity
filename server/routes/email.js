@@ -53,17 +53,23 @@
 
 const express = require('express')
 const router = express.Router()
-require('dotenv').config()
-const mailgun = require('mailgun-js')({
-  apiKey: process.env.MAILGUN_API_KEY,
-  domain: process.env.MAILGUN_DOMAIN,
-})
 
 router.use(express.urlencoded({ extended: true }))
 router.use(express.json())
 
+const mailgun = require('mailgun-js')
+
 router.post('/', async (req, res) => {
   try {
+    if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+      throw new Error('Missing Mailgun environment variables!')
+    }
+
+    const mg = mailgun({
+      apiKey: process.env.MAILGUN_API_KEY,
+      domain: process.env.MAILGUN_DOMAIN,
+    })
+
     const {
       firstName,
       lastName,
@@ -94,20 +100,20 @@ Additional Info: ${additionalInfo}
 You can listen to the track here: ${linkUpload}`,
     }
 
-    mailgun.messages().send(data, (error, body) => {
+    mg.messages().send(data, (error, body) => {
       if (error) {
-        console.error('Error sending email:', error)
+        console.error('Mailgun send error:', error)
         return res.status(500).json({ message: error.toString() })
       }
+
       console.log('Email sent successfully:', body)
       res.status(200).json({ message: 'Email sent!', body })
     })
   } catch (err) {
-    console.error('Unexpected error:', err)
-    res.status(500).json({ message: 'Internal Server Error', error: err.toString() })
+    console.error('Email route error:', err)
+    res.status(500).json({
+      message: 'Internal Server Error',
+      error: err.toString(),
+    })
   }
 })
-
-module.exports = router
-
-

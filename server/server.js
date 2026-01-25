@@ -1,4 +1,7 @@
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -19,9 +22,8 @@ app.use(cors({
 
 app.use(express.json());
 
-// Health Check
 app.get('/health', (req, res) => {
-  res.send('ok');
+  res.json({ ok: true });
 });
 
 // API routes
@@ -30,12 +32,12 @@ app.use('/api/artists', require('./routes/artists'));
 app.use('/api/news', require('./routes/news'));
 app.use('/api/shop', require('./routes/shop'));
 
-// Serve React app for non-API routes
-app.use(express.static(path.join(__dirname, '../client/dist')))
+// Serve React app
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'))
-})
+  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+});
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server listening on port ${port}`);
